@@ -2,13 +2,22 @@ body {
     font-size: 16px;
 }
 
+.missingStudents {
+    display: none;
+}
+
+.hide {
+    display: none;
+}
+
 .intro h3 {
     font-size: 1.2rem;
 }
 
-.buttons {
+.margin-top-20 {
     margin-top: 20px;
 }
+
 
 .font {
     font-size: 0.9rem;

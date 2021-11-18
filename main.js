@@ -1,5 +1,7 @@
 const imgEl = document.querySelector("img");
 const correctCounterEl = document.querySelector(".correct");
+const missingstudentsEl = document.querySelector("#studentsImg404")
+const honorableStudentsEl = document.querySelector(".missingStudents")
 
 
 const students = [
@@ -162,7 +164,7 @@ const students = [
 ];
 
 
-/*
+
 const missing_students = [
 	{
 		"name": "Andjela Saponjic",
@@ -185,26 +187,44 @@ const missing_students = [
 		"image": null,
 	},
 ];
-*/
+
+
+	
+
 
 let correctCounter = 0;
 const totalImages = students.length;
-let studentIndex = 0;
-let imageIndex;
+let currentStudentIndex = totalImages;
 
-function checkResults() {
-    if (studentIndex == totalImages) {
-        correctCounterEl.innerHTML = `You got ${correctCounter} out of ${totalImages} correct!`;
-    } else {
-        return false;
-    }
+function newGame() {
+    console.log("New Game Started!")
+    currentStudentIndex = 0;
+    nextStudent()
 }
 
 function displayStudent() {
-    console.log(students[0]);
-    imgEl.setAttribute("src", students[0].image);
+    imgEl.setAttribute("src", students[38].image)
+    console.log(students[38].name)
  
 }
 
-displayStudent()
+function checkResults() {
+    if (currentStudentIndex == totalImages) {
+        console.log("Game Done!")
+        correctCounterEl.innerHTML = `GAME FINISHED! <br>${correctCounter} out of ${totalImages} correct!`;
+        imgEl.classList.add(".hide")        
+		honorableStudentsEl.classList.remove("missingStudents")
+		missing_students.forEach(mStuds => {
+			missingstudentsEl.innerHTML += `
+				<li>
+					${mStuds.name}.
+				</li>
+			`;
+		}) 
+    } else {
+        correctCounterEl.innerHTML = `Your current score is ${correctCounter} out of ${totalImages}`
+    }
+}
+
+
 checkResults()
