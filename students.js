@@ -1,7 +1,3 @@
-const imgEl = document.querySelector("img");
-const correctCounterEl = document.querySelector(".correct");
-
-
 const students = [
 	{
 		"name" : "Adi Dzocaj",
@@ -161,8 +157,6 @@ const students = [
 	},
 ];
 
-
-/*
 const missing_students = [
 	{
 		"name": "Andjela Saponjic",
@@ -185,26 +179,3 @@ const missing_students = [
 		"image": null,
 	},
 ];
-*/
-
-let correctCounter = 0;
-const totalImages = students.length;
-let studentIndex = 0;
-let imageIndex;
-
-function checkResults() {
-    if (studentIndex == totalImages) {
-        correctCounterEl.innerHTML = `You got ${correctCounter} out of ${totalImages} correct!`;
-    } else {
-        return false;
-    }
-}
-
-function displayStudent() {
-    console.log(students[0]);
-    imgEl.setAttribute("src", students[0].image);
- 
-}
-
-displayStudent()
-checkResults()
