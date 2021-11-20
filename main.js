@@ -1,7 +1,12 @@
 const imgEl = document.querySelector("img");
 const correctCounterEl = document.querySelector(".correct");
-const missingstudentsEl = document.querySelector("#studentsImg404")
-const honorableStudentsEl = document.querySelector(".missingStudents")
+const missingstudentsEl = document.querySelector("#studentsImg404");
+const honorableStudentsEl = document.querySelector(".missingStudents");
+const a1 = document.querySelector("#a1");
+const a2 = document.querySelector("#a2");
+const a3 = document.querySelector("#a3");
+const a4 = document.querySelector("#a4");
+
 
 
 const students = [
@@ -191,27 +196,85 @@ const missing_students = [
 
 	
 
-
+//	Variables
 let correctCounter = 0;
 const totalImages = students.length;
-let currentStudentIndex = totalImages;
+let currentStudentIndex = students[0];
+let correctAnswer = students[0].name;
+let currentStudent = 0;
+let answers = [];
+let passedStudents = [];
 
-function newGame() {
+//	Get Student Group, where X is correct and rest is randomized  
+function getanswers(x) {
+	answers = [];
+	answers.push(students[x]) // Pushes in correct answer
+	for(let i = 0; i < 3; i++) { //	Get random alternatives
+			answers.push(students[i])
+		if (i > students.length) {	//	Checks if students actually exists
+			answer.push(students[x])
+		}	
+	}
+	console.log(answers)
+}
+
+//	Array shuffle
+function shuffleGroup(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function startGame() {
+	getanswers();
     console.log("New Game Started!")
-    currentStudentIndex = 0;
-    nextStudent()
+	nextStudent()
 }
 
-function displayStudent() {
-    imgEl.setAttribute("src", students[38].image)
-    console.log(students[38].name)
- 
+const btn = document.getElementById("newgame");
+
+btn.addEventListener("click", startGame);
+
+let correctStudent;
+
+//	Next student in line
+function nextStudent() {
+			
+		//	Get one RANDOM STUDENT name aka choice generator.
+		let randomStudent = Math.floor(Math.random() * students.length);
+		// for (let i = 0; i < students.length; i++){
+		// 	if (students[randomStudent] == students[i].name) {
+		// 		correctStudent = students[i];
+		// 	}
+		// }
+		correctStudent = students[randomStudent];
+		getanswers(randomStudent);
+	if(!passedStudents.includes(correctStudent)) {
+		shuffleGroup(students);
+		shuffleGroup(answers);
+		correctAnswer = correctStudent.name;
+		imgEl.setAttribute("src", correctStudent.image)
+		a1.innerHTML = `${answers[0].name}`
+		a2.innerHTML = `${answers[1].name}`
+		a3.innerHTML = `${answers[2].name}`
+		a4.innerHTML = `${answers[3].name}`
+		currentStudent = currentStudent + 4;
+		checkResults()
+		passedStudents.push(correctStudent)
+	} else {
+		nextStudent()
+		for (let i = 0; i < passedStudents.length; i++) {
+			console.log(passedStudents[i].name)
+		}
+	}
 }
 
+
+//	Check results after each student "guess". If "currentStudentIndex" is EQUAL to "totaLImages", end the game and show students without images and player score out of possible score.
 function checkResults() {
     if (currentStudentIndex == totalImages) {
-        console.log("Game Done!")
-        correctCounterEl.innerHTML = `GAME FINISHED! <br>${correctCounter} out of ${totalImages} correct!`;
+        correctCounterEl.innerHTML = `Game Over! <br>${correctCounter} out of ${totalImages} correct!`;
         imgEl.classList.add(".hide")        
 		honorableStudentsEl.classList.remove("missingStudents")
 		missing_students.forEach(mStuds => {
@@ -227,4 +290,3 @@ function checkResults() {
 }
 
 
-checkResults()
