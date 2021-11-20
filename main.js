@@ -212,14 +212,14 @@ function getanswers(x) {
 	for(let i = 0; i < 3; i++) { //	Get random alternatives
 			answers.push(students[i])
 		if (i > students.length) {	//	Checks if students actually exists
-			answer.push(students[x])
+			answers.push(students[x])
 		}	
 	}
 	console.log(answers)
 }
 
 //	Array shuffle
-function shuffleGroup(array) {
+function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
@@ -228,7 +228,6 @@ function shuffleGroup(array) {
 
 function startGame() {
 	getanswers();
-    console.log("New Game Started!")
 	nextStudent()
 }
 
@@ -251,8 +250,8 @@ function nextStudent() {
 		correctStudent = students[randomStudent];
 		getanswers(randomStudent);
 	if(!passedStudents.includes(correctStudent)) {
-		shuffleGroup(students);
-		shuffleGroup(answers);
+		shuffleArray(students);
+		shuffleArray(answers);
 		correctAnswer = correctStudent.name;
 		imgEl.setAttribute("src", correctStudent.image)
 		a1.innerHTML = `${answers[0].name}`
