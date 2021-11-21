@@ -1,7 +1,10 @@
 const imgEl = document.querySelector("img");
+const profileImg = document.querySelector("#profile-img")
+const btnOptionEl = document.querySelector(".optionBtn")
+const buttonEl = document.querySelector("#buttonEl")
 const correctCounterEl = document.querySelector(".correct");
-const missingstudentsEl = document.querySelector("#studentsImg404");
-const honorableStudentsEl = document.querySelector(".missingStudents");
+
+
 const a1 = document.querySelector("#a1");
 const a2 = document.querySelector("#a2");
 const a3 = document.querySelector("#a3");
@@ -199,93 +202,107 @@ const missing_students = [
 //	Variables
 let correctCounter = 0;
 const totalImages = students.length;
-let currentStudentIndex = students[0];
-let correctAnswer = students[0].name;
-let currentStudent = 0;
+let correctStudent;
 let answers = [];
 let passedStudents = [];
 
+
+
+
 //	Get Student Group, where X is correct and rest is randomized  
-function getanswers(x) {
+function getAnswers(x) {
 	answers = [];
-	answers.push(students[x]) // Pushes in correct answer
+	answers.push(students[x]) // Pushes in correct THE answer
 	for(let i = 0; i < 3; i++) { //	Get random alternatives
 			answers.push(students[i])
 		if (i > students.length) {	//	Checks if students actually exists
 			answers.push(students[x])
 		}	
 	}
-	console.log(answers)
 }
 
 //	Array shuffle
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+        let temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
     }
 }
 
 function startGame() {
-	getanswers();
-	nextStudent()
+	getAnswers();
+	nextStudent();
 }
 
-const btn = document.getElementById("newgame");
-
-btn.addEventListener("click", startGame);
-
-let correctStudent;
 
 //	Next student in line
 function nextStudent() {
 			
-		//	Get one RANDOM STUDENT name aka choice generator.
+		//	Get one RANDOM STUDENT name
 		let randomStudent = Math.floor(Math.random() * students.length);
-		// for (let i = 0; i < students.length; i++){
-		// 	if (students[randomStudent] == students[i].name) {
-		// 		correctStudent = students[i];
-		// 	}
-		// }
-		correctStudent = students[randomStudent];
-		getanswers(randomStudent);
-	if(!passedStudents.includes(correctStudent)) {
-		shuffleArray(students);
-		shuffleArray(answers);
-		correctAnswer = correctStudent.name;
-		imgEl.setAttribute("src", correctStudent.image)
-		a1.innerHTML = `${answers[0].name}`
-		a2.innerHTML = `${answers[1].name}`
-		a3.innerHTML = `${answers[2].name}`
-		a4.innerHTML = `${answers[3].name}`
-		currentStudent = currentStudent + 4;
-		checkResults()
-		passedStudents.push(correctStudent)
-	} else {
-		nextStudent()
-		for (let i = 0; i < passedStudents.length; i++) {
-			console.log(passedStudents[i].name)
-		}
+		correctStudent = students[randomStudent];	//	Take randomStudent and make it the correctStudent that needs to be guessed.
+
+		getAnswers(randomStudent);	//	Get random answers/choices
+		
+		if(!passedStudents.includes(correctStudent)) {	//	Check if correct student / current student is in passed students. If not, then run the code below.
+			
+			shuffleArray(students);
+			shuffleArray(answers);	//	Shuffle the answers in a random index.
+			correctAnswer = correctStudent.name;
+			imgEl.setAttribute("src", correctStudent.image)	//	Show student image
+			 a1.innerHTML = `${answers[0].name}`
+			 a2.innerHTML = `${answers[1].name}`
+			 a3.innerHTML = `${answers[2].name}`
+			 a4.innerHTML = `${answers[3].name}`
+			passedStudents.push(correctStudent)	//	Pushes the correct student into passed students array to not get the same picture.
+			for (let i = 0; i < passedStudents.length; i++) {	//	Check who has been pushed to the passStudents array.
+				console.log(passedStudents[i].name);
+		}}
+			else {	
+				nextStudent()
 	}
+
+	Results();
 }
 
 
-//	Check results after each student "guess". If "currentStudentIndex" is EQUAL to "totaLImages", end the game and show students without images and player score out of possible score.
-function checkResults() {
-    if (currentStudentIndex == totalImages) {
+
+function Results() {
+    if (passedStudents.length == totalImages) {
         correctCounterEl.innerHTML = `Game Over! <br>${correctCounter} out of ${totalImages} correct!`;
-        imgEl.classList.add(".hide")        
-		honorableStudentsEl.classList.remove("missingStudents")
-		missing_students.forEach(mStuds => {
-			missingstudentsEl.innerHTML += `
-				<li>
-					${mStuds.name}.
-				</li>
-			`;
-		}) 
+        profileImg.classList.add("hide");
+		buttonEl.classList.add("hide")
     } else {
         correctCounterEl.innerHTML = `Your current score is ${correctCounter} out of ${totalImages}`
     }
 }
 
+a1.addEventListener('click', () => {
+	if(correctStudent.name == answers[0].name) {
+		correctCounter++;
+	}
+	nextStudent()
+})
+a2.addEventListener('click', () => {
+	if(correctStudent.name == answers[1].name) {
+		correctCounter++;
+	}
+	nextStudent()
+})
+a3.addEventListener('click', () => {
+	if(correctStudent.name == answers[2].name) {
+		correctCounter++;
+	}
+	nextStudent()
+})
+a4.addEventListener('click', () => {
+	if(correctStudent.name == answers[3].name) {
+		correctCounter++;
+	}
+	nextStudent()
+})
 
+
+startGame()
