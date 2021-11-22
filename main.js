@@ -1,10 +1,11 @@
 const imgEl = document.querySelector("img");
 const profileImg = document.querySelector("#profile-img")
-const btnOptionEl = document.querySelector(".optionBtn")
-const buttonEl = document.querySelector("#buttonEl")
-const correctCounterEl = document.querySelector(".correct");
+const scoreEL = document.querySelector(".correct");
+const correct = document.querySelector("#correct")
 
-
+const newGameBtn = document.querySelector("#newGame")
+const btnOption = document.querySelector(".optionBtn")
+const button = document.querySelector("#buttonEl")
 const a1 = document.querySelector("#a1");
 const a2 = document.querySelector("#a2");
 const a3 = document.querySelector("#a3");
@@ -200,26 +201,27 @@ const missing_students = [
 	
 
 //	Variables
-let correctCounter = 0;
+let score = 0;
 const totalImages = students.length;
 let correctStudent;
 let answers = [];
 let passedStudents = [];
+let randomStudent = Math.floor(Math.random() * students.length);
+
+//	Bug 1: Player sometimes will be able to get 2 of the same options, this does not happen very often but it still does at least twice from playtesting the game. 
+
+//	Bug 2: Adis bild är större än de andra bilderna så jag lade till 500x500 i html koden om du undrar varför eftersom jag vet du hade gjort alla bilder lika stora. :)
 
 
-
-
-//	Get Student Group, where X is correct and rest is randomized  
+//	Get answers/options to buttons	
 function getAnswers(x) {
 	answers = [];
 	answers.push(students[x]) // Pushes in correct THE answer
 	for(let i = 0; i < 3; i++) { //	Get random alternatives
 			answers.push(students[i])
-		if (i > students.length) {	//	Checks if students actually exists
-			answers.push(students[x])
-		}	
+			
 	}
-}
+}	
 
 //	Array shuffle
 function shuffleArray(array) {
@@ -231,7 +233,17 @@ function shuffleArray(array) {
     }
 }
 
+
+newGameBtn.addEventListener('click', startGame)
+
 function startGame() {
+	profileImg.classList.remove("hide");
+	button.classList.remove("hide");
+	newGameBtn.classList.add("hide")
+	passedStudents = [];
+	score = 0;
+	answers = [];
+	shuffleArray(students);
 	getAnswers();
 	nextStudent();
 }
@@ -239,11 +251,11 @@ function startGame() {
 
 //	Next student in line
 function nextStudent() {
-			
 		//	Get one RANDOM STUDENT name
-		let randomStudent = Math.floor(Math.random() * students.length);
+		
 		correctStudent = students[randomStudent];	//	Take randomStudent and make it the correctStudent that needs to be guessed.
 
+	
 		getAnswers(randomStudent);	//	Get random answers/choices
 		
 		if(!passedStudents.includes(correctStudent)) {	//	Check if correct student / current student is in passed students. If not, then run the code below.
@@ -258,48 +270,54 @@ function nextStudent() {
 			 a4.innerHTML = `${answers[3].name}`
 			passedStudents.push(correctStudent)	//	Pushes the correct student into passed students array to not get the same picture.
 			for (let i = 0; i < passedStudents.length; i++) {	//	Check who has been pushed to the passStudents array.
-				console.log(passedStudents[i].name);
+				//console.log(passedStudents[i].name);
 		}}
 			else {	
 				nextStudent()
 	}
 
-	Results();
+	endResults();
 }
 
 
 
-function Results() {
+function endResults() {
     if (passedStudents.length == totalImages) {
-        correctCounterEl.innerHTML = `Game Over! <br>${correctCounter} out of ${totalImages} correct!`;
+        scoreEL.innerHTML = `Game Over! <br>${score} out of ${totalImages} correct!`;
         profileImg.classList.add("hide");
-		buttonEl.classList.add("hide")
-    } else {
-        correctCounterEl.innerHTML = `Your current score is ${correctCounter} out of ${totalImages}`
+		button.classList.add("hide");
+		newGameBtn.classList.remove("hide")
+	
+	} else {
+        scoreEL.innerHTML = `Your current score is ${score} out of ${totalImages} total!`
     }
 }
 
 a1.addEventListener('click', () => {
 	if(correctStudent.name == answers[0].name) {
-		correctCounter++;
+		score++;
+
 	}
 	nextStudent()
 })
 a2.addEventListener('click', () => {
 	if(correctStudent.name == answers[1].name) {
-		correctCounter++;
+		score++;
+
 	}
 	nextStudent()
 })
 a3.addEventListener('click', () => {
 	if(correctStudent.name == answers[2].name) {
-		correctCounter++;
+		score++;
+
 	}
 	nextStudent()
 })
 a4.addEventListener('click', () => {
 	if(correctStudent.name == answers[3].name) {
-		correctCounter++;
+		score++;
+
 	}
 	nextStudent()
 })
