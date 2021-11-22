@@ -206,7 +206,6 @@ const totalImages = students.length;
 let correctStudent;
 let answers = [];
 let passedStudents = [];
-let randomStudent = Math.floor(Math.random() * students.length);
 
 //	Bug 1: Player sometimes will be able to get 2 of the same options, this does not happen very often but it still does at least twice from playtesting the game. 
 
@@ -219,8 +218,14 @@ function getAnswers(x) {
 	answers.push(students[x]) // Pushes in correct THE answer
 	for(let i = 0; i < 3; i++) { //	Get random alternatives
 			answers.push(students[i])
-			
-	}
+		if (students[i] == correctStudent) {
+			let random = Math.floor(Math.random() * students.length);
+				answers.push(students[random+1])
+		}	
+	}	
+	let uniqueAnswers = [...new Set(answers)]
+	console.log(uniqueAnswers)
+	console.log(correctStudent)
 }	
 
 //	Array shuffle
@@ -242,9 +247,9 @@ function startGame() {
 	newGameBtn.classList.add("hide")
 	passedStudents = [];
 	score = 0;
+	getAnswers();
 	answers = [];
 	shuffleArray(students);
-	getAnswers();
 	nextStudent();
 }
 
@@ -252,7 +257,7 @@ function startGame() {
 //	Next student in line
 function nextStudent() {
 		//	Get one RANDOM STUDENT name
-		
+		let randomStudent = Math.floor(Math.random() * students.length);
 		correctStudent = students[randomStudent];	//	Take randomStudent and make it the correctStudent that needs to be guessed.
 
 	
